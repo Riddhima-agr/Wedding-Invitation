@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("scratchCanvas");
   const ctx = canvas.getContext("2d");
 
-  // Wedding date: 20 November 2027, 6:00 PM local time
+  // Wedding date: 24 November 2026, 6:00 PM local time
   const weddingDate = new Date(2026, 10, 24, 18, 0, 0);
 
   let gateAnimationRunning = false;
@@ -21,6 +21,55 @@ document.addEventListener("DOMContentLoaded", () => {
   let isRevealed = false;
   let countdownInterval = null;
   let gateTimers = [];
+
+  // =========================
+  // HEART SHAPE
+  // Keep this shape aligned with #smoothHeartClip in index.html
+  // =========================
+
+  function traceHeart(context, w, h) {
+    context.beginPath();
+
+    context.moveTo(w * 0.5, h * 0.96);
+
+    context.bezierCurveTo(
+      w * 0.43, h * 0.89,
+      w * 0.04, h * 0.62,
+      w * 0.04, h * 0.31
+    );
+
+    context.bezierCurveTo(
+      w * 0.04, h * 0.12,
+      w * 0.17, h * 0.02,
+      w * 0.32, h * 0.04
+    );
+
+    context.bezierCurveTo(
+      w * 0.40, h * 0.045,
+      w * 0.46, h * 0.10,
+      w * 0.5, h * 0.19
+    );
+
+    context.bezierCurveTo(
+      w * 0.54, h * 0.10,
+      w * 0.60, h * 0.045,
+      w * 0.68, h * 0.04
+    );
+
+    context.bezierCurveTo(
+      w * 0.83, h * 0.02,
+      w * 0.96, h * 0.12,
+      w * 0.96, h * 0.31
+    );
+
+    context.bezierCurveTo(
+      w * 0.96, h * 0.62,
+      w * 0.57, h * 0.89,
+      w * 0.5, h * 0.96
+    );
+
+    context.closePath();
+  }
 
   // =========================
   // CLEAR PENDING ANIMATIONS
@@ -46,32 +95,29 @@ document.addEventListener("DOMContentLoaded", () => {
     gateAnimationRunning = true;
     clearGateTimers();
 
-    // Prepare the gate overlay
     gateIntro.classList.remove("opening", "finished");
     gateIntro.classList.add("active");
     gateIntro.setAttribute("aria-hidden", "false");
     gateIntro.removeAttribute("inert");
 
-    // Show the invitation message first.
-    // The gate image remains closed in front of the message.
     addGateTimer(() => {
       gateIntro.classList.add("opening");
     }, 1800);
 
-    // After the doors open, show the date page
     addGateTimer(() => {
       landingPage.classList.add("hidden");
       datePage.classList.remove("hidden");
 
-      setupScratchCard();
+      requestAnimationFrame(() => {
+        setupScratchCard();
+      });
+
       updateCountdown();
 
-      // Fade away the gate overlay
       gateIntro.classList.add("finished");
       gateIntro.setAttribute("aria-hidden", "true");
       gateIntro.setAttribute("inert", "");
 
-      // Allow the CSS fade-out to finish
       addGateTimer(() => {
         gateIntro.classList.remove(
           "active",
@@ -81,7 +127,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         gateAnimationRunning = false;
       }, 750);
-
     }, 5000);
   });
 
@@ -105,10 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
     gateIntro.setAttribute("inert", "");
 
     gateAnimationRunning = false;
+    isScratching = false;
   });
 
   // =========================
-  // SCRATCH CARD SETUP
+  // HEART SCRATCH CARD SETUP
   // =========================
 
   function setupScratchCard() {
@@ -121,15 +167,21 @@ document.addEventListener("DOMContentLoaded", () => {
     canvas.width = Math.round(rect.width * pixelRatio);
     canvas.height = Math.round(rect.height * pixelRatio);
 
+    // Draw in CSS pixel coordinates
     ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
     ctx.globalCompositeOperation = "source-over";
     ctx.clearRect(0, 0, rect.width, rect.height);
 
-    // Sage-green scratch layer
-    ctx.fillStyle = "#cbd1bd";
-    ctx.fillRect(0, 0, rect.width, rect.height);
+    // Draw ONLY a smooth heart-shaped coating
+    ctx.save();
+    traceHeart(ctx, rect.width, rect.height);
 
-    // Scratch card text
+    ctx.fillStyle = "#cbd1bd";
+    ctx.fill();
+
+    ctx.clip();
+
+    // Text on the scratch coating
     ctx.fillStyle = "#56634b";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -138,26 +190,29 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.fillText(
       "A LITTLE SURPRISE",
       rect.width / 2,
-      rect.height / 2 - 22
+      rect.height * 0.42
     );
 
-    ctx.font = "italic 23px Georgia";
+    ctx.font = "italic 22px Georgia";
     ctx.fillText(
       "Scratch to reveal",
       rect.width / 2,
-      rect.height / 2 + 5
+      rect.height * 0.52
     );
 
-    ctx.font = "20px Georgia";
+    ctx.font = "22px Georgia";
     ctx.fillText(
       "♡",
       rect.width / 2,
-      rect.height / 2 + 37
+      rect.height * 0.62
     );
+
+    ctx.restore();
 
     isScratching = false;
     isRevealed = false;
     canvas.style.display = "block";
+    canvas.style.pointerEvents = "auto";
   }
 
   // =========================
@@ -168,21 +223,27 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!isScratching || isRevealed) return;
 
     const rect = canvas.getBoundingClientRect();
-
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
+    // Erase the coating in a circular brush
+    ctx.save();
     ctx.globalCompositeOperation = "destination-out";
     ctx.beginPath();
     ctx.arc(x, y, 20, 0, Math.PI * 2);
     ctx.fill();
+    ctx.restore();
   }
 
   canvas.addEventListener("pointerdown", event => {
     if (isRevealed) return;
 
     isScratching = true;
-    canvas.setPointerCapture(event.pointerId);
+
+    if (canvas.setPointerCapture) {
+      canvas.setPointerCapture(event.pointerId);
+    }
+
     scratch(event);
   });
 
@@ -197,40 +258,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   canvas.addEventListener("pointerup", stopScratching);
   canvas.addEventListener("pointercancel", stopScratching);
+  canvas.addEventListener("lostpointercapture", stopScratching);
 
-  // Reveal date after enough of the scratch layer is removed
+  // =========================
+  // CHECK SCRATCH PROGRESS
+  // Count only pixels inside the heart
+  // =========================
+
   function checkScratchProgress() {
     if (isRevealed) return;
 
-    const imageData = ctx.getImageData(
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
 
-    const pixels = imageData.data;
-    let transparentPixels = 0;
-    let checkedPixels = 0;
+    const pixelRatio = window.devicePixelRatio || 1;
+    const pixels = ctx.getImageData(
+      0, 0, canvas.width, canvas.height
+    ).data;
 
-    // Sample pixels for performance
-    for (let i = 3; i < pixels.length; i += 16) {
-      checkedPixels++;
+    let heartPixels = 0;
+    let erasedPixels = 0;
 
-      if (pixels[i] < 128) {
-        transparentPixels++;
+    // Sample the canvas for performance
+    for (let y = 2; y < rect.height; y += 5) {
+      for (let x = 2; x < rect.width; x += 5) {
+        const px = Math.round(x * pixelRatio);
+        const py = Math.round(y * pixelRatio);
+
+        // Test whether this point belongs to the heart
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        traceHeart(ctx, canvas.width, canvas.height);
+
+        const inside = ctx.isPointInPath(px, py);
+        ctx.restore();
+
+        if (!inside) continue;
+
+        const index = (py * canvas.width + px) * 4 + 3;
+
+        heartPixels++;
+
+        if (pixels[index] < 128) {
+          erasedPixels++;
+        }
       }
     }
 
-    const scratchedPercent = checkedPixels
-      ? transparentPixels / checkedPixels
+    const scratchedPercent = heartPixels
+      ? erasedPixels / heartPixels
       : 0;
 
-    if (scratchedPercent > 0.35) {
+    // Reveal the full invitation after 35% is scratched
+    if (scratchedPercent >= 0.35) {
       isRevealed = true;
-
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       canvas.style.display = "none";
+      canvas.style.pointerEvents = "none";
     }
   }
 
@@ -288,4 +372,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Start countdown
   updateCountdown();
   countdownInterval = setInterval(updateCountdown, 1000);
+
+  // Rebuild the coating when the page is resized
+  window.addEventListener("resize", () => {
+    if (!datePage.classList.contains("hidden") && !isRevealed) {
+      setupScratchCard();
+    }
+  });
 });
