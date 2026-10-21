@@ -1,0 +1,498 @@
+
+/* =========================
+   BASIC SETUP
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  background-color: #fffdf9;
+}
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  width: 100%;
+  color: #4e5946;
+  font-family: Georgia, "Times New Roman", serif;
+  overflow-x: hidden;
+  background-color: #fffdf9;
+}
+
+/* =========================
+   LANDING PAGE BACKGROUND
+========================= */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("./wedding_fresh.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 100% 100%;
+}
+
+/* Buttons */
+
+button {
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   PAGE LAYOUT
+========================= */
+
+.page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 22px;
+  margin: 0;
+  background: transparent !important;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* =========================
+   LANDING PAGE
+========================= */
+
+.invitation-content,
+.date-content {
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+  padding: 38px 20px;
+  background: rgba(255, 253, 249, 0.10);
+  border-radius: 8px;
+}
+
+.eyebrow {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  line-height: 1.8;
+  color: #78816c;
+  margin: 0 0 30px;
+}
+
+.invited-text {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  line-height: 1.8;
+  margin: 0 0 22px;
+  color: #747966;
+}
+
+.couple-names {
+  margin: 0;
+  font-size: clamp(36px, 7vw, 66px);
+  font-weight: normal;
+  letter-spacing: 3px;
+  line-height: 1.3;
+  color: #59664c;
+}
+
+.couple-names span {
+  color: #a4a98e;
+  font-style: italic;
+  font-size: 0.8em;
+}
+
+.small-divider {
+  width: 55px;
+  height: 1px;
+  margin: 25px auto;
+  background: #a5aa8f;
+}
+
+.celebration-text {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  line-height: 1.8;
+  margin: 0;
+  color: #747966;
+}
+
+.invitation-note {
+  font-size: 15px;
+  font-style: italic;
+  color: #777d6c;
+  margin: 22px 0 30px;
+}
+
+.open-button {
+  padding: 13px 29px;
+  border: 1px solid #7c876d;
+  background: rgba(255, 255, 255, 0.78);
+  color: #58664c;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s;
+}
+
+.open-button span {
+  margin-left: 7px;
+  font-size: 14px;
+}
+
+.open-button:hover {
+  background: #69765b;
+  color: white;
+}
+
+/* =========================
+   WEDDING DATE PAGE
+========================= */
+
+.date-content {
+  max-width: 600px;
+}
+
+.date-content .eyebrow {
+  margin-bottom: 15px;
+}
+
+.date-content h2 {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: normal;
+  margin: 0 0 14px;
+  color: #59664c;
+}
+
+.scratch-instruction {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  color: #777d6c;
+  margin-bottom: 20px;
+}
+
+/* Scratch card */
+
+.scratch-box {
+  position: relative;
+  width: min(100%, 390px);
+  height: 180px;
+  margin: 0 auto 35px;
+  overflow: hidden;
+  border: 1px solid rgba(120, 130, 105, 0.45);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.revealed-date {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+.revealed-date p {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #78816c;
+  margin: 8px 0;
+}
+
+.revealed-date h3 {
+  font-size: 28px;
+  font-weight: normal;
+  font-style: italic;
+  margin: 8px 0;
+  color: #59664c;
+}
+
+.revealed-date .wedding-date {
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+#scratchCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* =========================
+   COUNTDOWN
+========================= */
+
+.countdown-heading {
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: #78816c;
+}
+
+.countdown {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.time-box {
+  min-width: 78px;
+  padding: 15px 10px;
+  border: 1px solid rgba(120, 130, 105, 0.45);
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.time-box span {
+  display: block;
+  font-size: 27px;
+  color: #59664c;
+}
+
+.time-box small {
+  display: block;
+  margin-top: 7px;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #777d6c;
+}
+
+.back-button {
+  margin-top: 28px;
+  border: none;
+  background: transparent;
+  color: #59664c;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.back-button:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   WEDDING GATE INTRO
+========================= */
+
+.gate-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  overflow: hidden;
+  background: #f9f5e9;
+  isolation: isolate;
+}
+
+.gate-intro.active {
+  display: block;
+}
+
+/* Message appears behind the closed gate */
+
+.gate-message {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  color: #59664c;
+  /* background: rgba(255, 253, 248, 0.16); */
+  background-image: url("./wedding_in.png");
+  background-repeat: no-repeat;
+  background-position: center;
+background-size: cover;
+  animation: messageAppear 1s ease both;
+}
+
+.gate-message p {
+  font: 10px Arial, sans-serif;
+  letter-spacing: 3px;
+}
+
+.gate-message h2 {
+  font-size: clamp(20px, 4vw, 38px);
+  letter-spacing: 2px;
+  font-weight: normal;
+}
+
+.gate-message span {
+  font-style: italic;
+  font-size: 22px;
+}
+
+/*
+  Gate image is split into two halves.
+  Save the closed golden floral gate as closed-gate.png
+  in the same folder as index.html.
+*/
+
+.gate {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 3;
+
+  background-image: url("./wedding_ent.png");
+  background-repeat: no-repeat;
+  background-size: 200% 100%;
+
+  transition: transform 2s cubic-bezier(0.7, 0, 0.2, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.gate-left {
+  left: 0;
+  background-position: left center;
+  transform-origin: left center;
+}
+
+.gate-right {
+  right: 0;
+  background-position: right center;
+  transform-origin: right center;
+}
+
+/* Doors slide apart when opening */
+
+.gate-intro.opening .gate-left {
+  transform: translateX(-100%);
+}
+
+.gate-intro.opening .gate-right {
+  transform: translateX(100%);
+}
+
+/* Fade out the overlay after the doors open */
+
+.gate-intro.finished {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   MOBILE RESPONSIVENESS
+========================= */
+
+@media (max-width: 768px) {
+  body::before {
+    background-position: center center;
+    background-size: cover;
+  }
+
+  .page {
+    padding: 25px 14px;
+  }
+
+  .invitation-content,
+  .date-content {
+    padding: 28px 12px;
+    background: rgba(255, 253, 249, 0.12);
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+  }
+
+  .invited-text,
+  .celebration-text {
+    font-size: 9px;
+    letter-spacing: 1.5px;
+  }
+
+  .couple-names {
+    font-size: clamp(32px, 8vw, 48px);
+    letter-spacing: 1px;
+  }
+
+  .scratch-box {
+    height: 165px;
+  }
+
+  .countdown {
+    gap: 7px;
+  }
+
+  .time-box {
+    min-width: 65px;
+    padding: 12px 7px;
+  }
+
+  .time-box span {
+    font-size: 23px;
+  }
+
+  .gate-message p {
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .gate-message h2 {
+    font-size: 22px;
+  }
+
+  .gate-message span {
+    font-size: 19px;
+  }
+}
+
+/* Respect reduced-motion settings */
+
+@media (prefers-reduced-motion: reduce) {
+  .gate,
+  .gate-intro,
+  .gate-message {
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+  }
+}

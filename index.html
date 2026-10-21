@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Mayank &amp; Khushi | Wedding Invitation</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <main>
+    <!-- PAGE 1: LANDING PAGE -->
+    <section id="landingPage" class="page landing-page">
+      <div class="invitation-content">
+
+        <p class="eyebrow">
+          A LITTLE LOVE, A LIFETIME OF MEMORIES
+        </p>
+
+        <p class="invited-text">
+          YOU ARE CORDIALLY INVITED TO CELEBRATE
+        </p>
+
+        <h1 class="couple-names">
+          MAYANK <span>&amp;</span> KHUSHI
+        </h1>
+
+        <div class="small-divider"></div>
+
+        <p class="celebration-text">
+          THE WEDDING CELEBRATION
+        </p>
+
+        <p class="invitation-note">
+          Two hearts, one beautiful beginning.
+        </p>
+
+        <button
+          id="openButton"
+          class="open-button"
+          type="button">
+          OPEN ME <span aria-hidden="true">♡</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- PAGE 2: WEDDING DATE AND COUNTDOWN -->
+    <section id="datePage" class="page date-page hidden">
+      <div class="date-content">
+
+        <p class="eyebrow">
+          THE COUNTDOWN TO FOREVER
+        </p>
+
+        <h2>Our Special Day</h2>
+
+        <p class="scratch-instruction">
+          Gently scratch below to reveal the date
+        </p>
+
+        <!-- Scratch card -->
+        <div class="scratch-box">
+
+          <div class="revealed-date">
+            <p>THE WEDDING OF</p>
+
+            <h3>Mayank &amp; Khushi</h3>
+
+            <p class="wedding-date">
+              24 November 2026
+            </p>
+          </div>
+
+          <canvas
+            id="scratchCanvas"
+            aria-label="Scratch this area to reveal the wedding date">
+          </canvas>
+
+        </div>
+
+        <!-- Countdown -->
+        <div class="countdown-section">
+
+          <p class="countdown-heading">
+            COUNTING DOWN TO OUR FOREVER
+          </p>
+
+          <div id="countdown" class="countdown">
+
+            <div class="time-box">
+              <span id="days">000</span>
+              <small>Days</small>
+            </div>
+
+            <div class="time-box">
+              <span id="hours">00</span>
+              <small>Hours</small>
+            </div>
+
+            <div class="time-box">
+              <span id="minutes">00</span>
+              <small>Minutes</small>
+            </div>
+
+            <div class="time-box">
+              <span id="seconds">00</span>
+              <small>Seconds</small>
+            </div>
+
+          </div>
+        </div>
+
+        <button
+          id="backButton"
+          class="back-button"
+          type="button">
+          ← Back to invitation
+        </button>
+
+      </div>
+    </section>
+  </main>
+
+  <!-- WEDDING GATE INTRO ANIMATION -->
+  <div
+    id="gateIntro"
+    class="gate-intro"
+    aria-hidden="true"
+    inert>
+
+    <!-- Invitation message -->
+    <div class="gate-message">
+      <p>WITH LOVE AND BLESSINGS</p>
+
+      <h2>YOU ARE CORDIALLY INVITED</h2>
+
+      
+    </div>
+
+    <!-- Left gate panel -->
+    <div class="gate gate-left" aria-hidden="true">
+      <div class="gate-panel">
+        <span class="gate-decoration">❀</span>
+        <span class="gate-line"></span>
+        <span class="gate-handle">◆</span>
+      </div>
+    </div>
+
+    <!-- Right gate panel -->
+    <div class="gate gate-right" aria-hidden="true">
+      <div class="gate-panel">
+        <span class="gate-decoration">❀</span>
+        <span class="gate-line"></span>
+        <span class="gate-handle">◆</span>
+      </div>
+    </div>
+
+  </div>
+  
+
+
+
+  <!-- JavaScript: load only once -->
+  <script src="script.js"></script>
+
+</body>
+</html>
