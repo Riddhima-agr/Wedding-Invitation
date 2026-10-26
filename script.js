@@ -380,28 +380,57 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+// window.addEventListener("load", function () {
+//     const music = document.getElementById("weddingMusic");
+
+//     if (!music) return;
+
+//     music.volume = 0.35;
+
+//     // Try playing music as soon as the landing page loads
+//     const playMusic = () => {
+//         music.play().catch(() => {
+//             console.log("Browser requires user interaction to play music.");
+//         });
+//     };
+
+//     playMusic();
+
+//     // If autoplay is blocked, start music on the first tap
+//     document.addEventListener("pointerdown", function startMusic() {
+//         if (music.paused) {
+//             playMusic();
+//         }
+//     }, { once: true });
+// });
+
+
 window.addEventListener("load", function () {
     const music = document.getElementById("weddingMusic");
 
     if (!music) return;
 
     music.volume = 0.35;
+    music.loop = true;
 
-    // Try playing music as soon as the landing page loads
-    const playMusic = () => {
-        music.play().catch(() => {
-            console.log("Browser requires user interaction to play music.");
-        });
-    };
+    function playMusic() {
+        if (music.paused) {
+            music.play().catch((error) => {
+                console.log("Autoplay blocked; waiting for user interaction.", error);
+            });
+        }
+    }
 
+    // Try to play as soon as the landing page loads
     playMusic();
 
-    // If autoplay is blocked, start music on the first tap
-    document.addEventListener("pointerdown", function startMusic() {
-        if (music.paused) {
-            playMusic();
-        }
-    }, { once: true });
-});
+    // Mobile fallback: start music on the first screen tap
+    function startMusicOnInteraction() {
+        playMusic();
+    }
 
+    document.addEventListener("pointerdown", startMusicOnInteraction, {
+        once: true
+    });
+});
 
