@@ -380,3 +380,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+window.addEventListener("load", function () {
+    const music = document.getElementById("weddingMusic");
+
+    if (!music) return;
+
+    music.volume = 0.35;
+
+    // Try playing music as soon as the landing page loads
+    const playMusic = () => {
+        music.play().catch(() => {
+            console.log("Browser requires user interaction to play music.");
+        });
+    };
+
+    playMusic();
+
+    // If autoplay is blocked, start music on the first tap
+    document.addEventListener("pointerdown", function startMusic() {
+        if (music.paused) {
+            playMusic();
+        }
+    }, { once: true });
+});
+
+
