@@ -405,32 +405,71 @@ document.addEventListener("DOMContentLoaded", () => {
 // });
 
 
+
 window.addEventListener("load", function () {
     const music = document.getElementById("weddingMusic");
 
-    if (!music) return;
+    if (!music) {
+        console.error("Wedding music element not found!");
+        return;
+    }
 
+    // Music settings
     music.volume = 0.35;
     music.loop = true;
 
+    // Try playing immediately when the landing page loads
     function playMusic() {
         if (music.paused) {
             music.play().catch((error) => {
-                console.log("Autoplay blocked; waiting for user interaction.", error);
+                console.log(
+                    "Autoplay blocked. Waiting for the first user interaction.",
+                    error
+                );
             });
         }
     }
 
-    // Try to play as soon as the landing page loads
     playMusic();
 
-    // Mobile fallback: start music on the first screen tap
+    // Mobile fallback: play on the first screen interaction
     function startMusicOnInteraction() {
         playMusic();
+
+        document.removeEventListener(
+            "pointerdown",
+            startMusicOnInteraction,
+            true
+        );
+
+        document.removeEventListener(
+            "touchstart",
+            startMusicOnInteraction,
+            true
+        );
+
+        document.removeEventListener(
+            "click",
+            startMusicOnInteraction,
+            true
+        );
     }
 
-    document.addEventListener("pointerdown", startMusicOnInteraction, {
-        once: true
-    });
-});
+    document.addEventListener(
+        "pointerdown",
+        startMusicOnInteraction,
+        { once: true, capture: true }
+    );
 
+    document.addEventListener(
+        "touchstart",
+        startMusicOnInteraction,
+        { once: true, capture: true }
+    );
+
+    document.addEventListener(
+        "click",
+        startMusicOnInteraction,
+        { once: true, capture: true }
+    );
+});
